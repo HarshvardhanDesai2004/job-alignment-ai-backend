@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-app.set("trust proxy", 1);
 
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -16,6 +15,7 @@ const coverLetterRoutes = require("./routes/coverLetter.routes");
 
 
 const app = express();
+app.set("trust proxy", 1);
 
 /* CORS FIX */
 app.use(
