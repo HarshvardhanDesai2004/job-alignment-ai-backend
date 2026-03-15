@@ -55,8 +55,9 @@ const skillCoverage = totalSkills > 0 ? result.matchedSkills.length / totalSkill
 
     // 6️⃣ Project Relevance Score
     const projectTech = normalizeSkills(
-      (resume.projects || []).flatMap(p => Array.isArray(p.technologies) ? p.technologies : [])
-    );
+      (resume.projects || []).flatMap(p => Array.isArray(p.tech) ? p.tech : []));
+
+      
     const projectRelevanceScore = await calculateProjectRelevance(projectTech, jdSkills);
 
     // 7️⃣ Title Similarity Score
@@ -103,9 +104,14 @@ const skillsData = {
   matchedSkills: result.matchedSkills,
   missingSkills: result.missingSkills,
 };
-const scoreDifference = Math.abs(systemFinalScore - aiScores.finalScore);
+
+// ✅ Only use Gemini branch if it actually returned valid scores
+const geminiIsValid = aiScores.finalScore > 0;
+const scoreDifference = Math.abs(systemFinalScore - (aiScores.finalScore || 0));
+
 let finalAnalysis;
-if (scoreDifference < 15) {
+if (!geminiIsValid || scoreDifference < 15) {
+  // Use system scores — reliable
   finalAnalysis = {
     ...skillsData,
     hybridSkillScore,
@@ -118,10 +124,11 @@ if (scoreDifference < 15) {
     source: "system"
   };
 } else {
+  // Gemini returned valid scores AND differs significantly
   finalAnalysis = {
-   matchedSkills:aiScores.matchedSkills,                                      
-   missingSkills:aiScores.missingSkills,
-   hybridSkillScore: aiScores.hybridSkillScore,
+    matchedSkills: aiScores.matchedSkills?.length > 0 ? aiScores.matchedSkills : result.matchedSkills,
+    missingSkills: aiScores.missingSkills?.length > 0 ? aiScores.missingSkills : result.missingSkills,
+    hybridSkillScore: aiScores.hybridSkillScore,
     experienceScore: aiScores.experienceScore,
     projectRelevanceScore: aiScores.projectRelevanceScore,
     titleSimilarityScore: aiScores.titleSimilarityScore,
