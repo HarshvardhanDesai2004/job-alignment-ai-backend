@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 app.set("trust proxy", 1);
+
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
@@ -12,13 +13,6 @@ const statsRoutes = require("./routes/statsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const coverLetterRoutes = require("./routes/coverLetter.routes");
 
-const rateLimit = require("express-rate-limit");
-
-const aiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20,                   // 20 requests per window
-  message: { message: "Too many requests, please try again later" }
-});
 
 
 const app = express();
@@ -42,11 +36,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/jobs", jobRoutes);
-app.use("/api/analysis", aiLimiter, analysisRoutes);
-app.use("/api/ai", aiLimiter, aiSuggestionRoutes);
+app.use("/api/analysis", analysisRoutes);
+app.use("/api/ai", aiSuggestionRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/cover-letter", aiLimiter, coverLetterRoutes);
+app.use("/api/cover-letter", coverLetterRoutes);
 
 
 /* Health check */
