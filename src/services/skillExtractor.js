@@ -403,25 +403,22 @@ const normalizeSkill = (skill) => {
 
 // Skill extractor
 exports.extractSkills = (text) => {
-
   const normalizedText = normalizeText(text);
-
   const matchedSkills = new Set();
 
   for (const skill of COMMON_SKILLS) {
-
     const normalizedSkill = normalizeSkill(skill);
 
-    const regex = new RegExp(`\\b${normalizedSkill}\\b`, "i");
+    // ← ADD THIS LINE
+    const escaped = normalizedSkill.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+    const regex = new RegExp(`\\b${escaped}\\b`, "i");
     if (regex.test(normalizedText)) {
       matchedSkills.add(skill);
     }
   }
-
   return Array.from(matchedSkills);
 };
-
 // Education extractor
 exports.extractEducation = (text) => {
 
