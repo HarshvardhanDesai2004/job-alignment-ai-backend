@@ -1,6 +1,6 @@
 const { generateCoverLetter } = require("../services/coverLetter.service");
 
-const Resume = require("../models/resume");
+const Resume = require("../models/Resume");
 const JobDescription = require("../models/JobDescription");
 const User = require("../models/User");
 

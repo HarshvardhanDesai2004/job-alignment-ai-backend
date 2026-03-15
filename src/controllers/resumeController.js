@@ -1,6 +1,6 @@
 // backend/src/controllers/resumeController.js
 
-const Resume = require("../models/resume"); // use lowercase to match filename
+const Resume = require("../models/Resume"); // use lowercase to match filename
 const { extractTextFromFile } = require("../utils/fileParser");
 const fs = require("fs");
 

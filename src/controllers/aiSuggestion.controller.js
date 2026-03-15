@@ -1,5 +1,5 @@
 const { generateResumeSuggestions } = require("../services/aiSuggestion.service");
-const Resume = require("../models/resume");
+const Resume = require("../models/Resume");
 const JobDescription = require("../models/JobDescription");
 const Analysis = require("../models/Analysis");
 
